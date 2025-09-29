@@ -7,7 +7,7 @@
  * expo install expo-linear-gradient react-native-svg
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -25,6 +25,7 @@ import LinearGradient from 'react-native-linear-gradient';
 // For Expo, use: import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path, Circle, Line } from 'react-native-svg';
 import { ImageBackground } from 'react-native';
+import AddLoc from './add_loc';
 
 // Weather Icons Components
 const SunIcon = ({ size = 24, color = '#FCD34D' }) => (
@@ -106,7 +107,13 @@ const SettingsIcon = ({ size = 24, color = '#FFF' }) => (
 );
 
 function AppContent() {
+  const [showAddLoc, setShowAddLoc] = useState(false);
   const safeAreaInsets = useSafeAreaInsets();
+
+  // When showAddLoc is true we render the Add Location screen as a full page
+  if (showAddLoc) {
+    return <AddLoc onBack={() => setShowAddLoc(false)} />;
+  }
 
   const hourlyForecast = [
     { time: 'NOW', icon: 'sun', temp: '19°' },
@@ -165,12 +172,19 @@ function AppContent() {
         </View>
 
         {/* Main Weather Card */}
-        <View style={styles.mainCard}>
-          <Text style={styles.cityName}>Imus</Text>
-          <Text style={styles.temperature}>19°C</Text>
-          <Text style={styles.condition}>Mostly Clear</Text>
-          <Text style={styles.highLow}>H:24° L:18°</Text>
-        </View>
+        {!showAddLoc ? (
+          <TouchableOpacity
+            style={styles.mainCard}
+            onPress={() => setShowAddLoc(true)}
+          >
+            <Text style={styles.cityName}>Imus</Text>
+            <Text style={styles.temperature}>19°C</Text>
+            <Text style={styles.condition}>Mostly Clear</Text>
+            <Text style={styles.highLow}>H:24° L:18°</Text>
+          </TouchableOpacity>
+        ) : (
+          <AddLoc onBack={() => setShowAddLoc(false)} />
+        )}
 
         <View style={{ backgroundColor: '#515151a7', borderRadius: 32, padding: 12, marginBottom: 40, width: '108%', alignSelf: 'center'}}>
           <View style={styles.forecastCard}>
