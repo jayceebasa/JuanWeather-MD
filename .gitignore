@@ -73,3 +73,4 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+# Ignore leftover nested project folder\nMyApp/
