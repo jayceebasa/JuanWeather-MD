@@ -16,6 +16,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import {
   SafeAreaProvider,
@@ -110,6 +111,7 @@ const SettingsIcon = ({ size = 24, color = '#FFF' }) => (
 function AppContent() {
   const [showAddLoc, setShowAddLoc] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showSOSPopup, setShowSOSPopup] = useState(false);
   const safeAreaInsets = useSafeAreaInsets();
 
   // When showAddLoc is true we render the Add Location screen as a full page
@@ -170,7 +172,14 @@ function AppContent() {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.sosButton}>
+          <TouchableOpacity 
+            style={styles.sosButton}
+            onPress={() => {
+              setShowSOSPopup(true);
+              // Auto-dismiss after 2 seconds
+              setTimeout(() => setShowSOSPopup(false), 2000);
+            }}
+          >
             <Text style={styles.sosText}>SOS</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setShowSettings(true)}>
@@ -267,6 +276,23 @@ function AppContent() {
         </View>
 
       </ScrollView>
+
+      {/* SOS Success Popup Modal */}
+      <Modal
+        visible={showSOSPopup}
+        transparent={true}
+        animationType="fade"
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.checkmarkContainer}>
+              <Text style={styles.checkmark}>✓</Text>
+            </View>
+            <Text style={styles.modalTitle}>Message Sent!</Text>
+            <Text style={styles.modalSubtitle}>Your SOS alert has been sent to emergency contacts</Text>
+          </View>
+        </View>
+      </Modal>
     </ImageBackground>
   );
 }
@@ -421,6 +447,49 @@ const styles = StyleSheet.create({
   metricValue: {
     color: '#FFF',
     fontSize: 14,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#5151519a',
+    borderRadius: 20,
+    paddingVertical: 40,
+    paddingHorizontal: 30,
+    alignItems: 'center',
+    width: '80%',
+    borderWidth: 1,
+    borderColor: 'rgba(81, 81, 81, 0.5)',
+  },
+  checkmarkContainer: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: 'rgba(76, 175, 80, 0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  checkmark: {
+    fontSize: 40,
+    color: '#4caf50',
+    fontWeight: 'bold',
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#FFF',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  modalSubtitle: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.8)',
+    textAlign: 'center',
+    lineHeight: 20,
   },
 });
 
