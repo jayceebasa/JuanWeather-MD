@@ -26,6 +26,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Svg, { Path, Circle, Line } from 'react-native-svg';
 import { ImageBackground } from 'react-native';
 import AppContent from './components/homepage';
+import Splash from './components/splash';
 
 // Weather Icons Components
 const SunIcon = ({ size = 24, color = '#FCD34D' }) => (
@@ -107,11 +108,16 @@ const SettingsIcon = ({ size = 24, color = '#FFF' }) => (
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
+  const [showSplash, setShowSplash] = React.useState(true);
 
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="light-content" />
-      <AppContent />
+      {showSplash ? (
+        <Splash onFinish={() => setShowSplash(false)} />
+      ) : (
+        <AppContent />
+      )}
     </SafeAreaProvider>
   );
 }
